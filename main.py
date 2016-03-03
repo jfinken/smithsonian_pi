@@ -8,18 +8,25 @@ from Adafruit_MotorHAT.Adafruit_PWM_Servo_Driver import PWM
 mh = Adafruit_MotorHAT(addr=0x60)
 
 #------------------------------------------------------------------------------
-# PWM control:
+# PWM control for the camera pod:
 # Initialise the PWM device using the default address
 #------------------------------------------------------------------------------
 yawPitchCam = PWM(0x41, debug=False) 
+yawPitchCam.setPWMFreq(60) # Set PWM frequency to 60Hz
 
 servoMin = 150 # Min pulse length out of 4096
 servoMax = 700 # Max pulse length out of 4096
 maxDegree = 180 # Degrees your servo can rotate
 degIncrease = 2 # Number of degrees to increase by each time
 
-yawPitchCam.setPWMFreq(60) # Set PWM frequency to 60Hz
+pitchDeg = 90 # Start off at lowest volume
+yawDeg = 90 # Start off at lowest volume
+setDegree(0, pitchDeg) 
+setDegree(1, yawDeg) 
 
+#------------------------------------------------------------------------------
+# Actually set the PWM for a given channel: 0=pitch, 1=yaw
+#------------------------------------------------------------------------------
 def setDegree(channel, d):
     degreePulse = servoMin
     degreePulse += int((servoMax - servoMin) / maxDegree) * d
@@ -37,34 +44,25 @@ def turnOffMotors():
 
 atexit.register(turnOffMotors)
 
-
 #------------------------------------------------------------------------------
-# UI/windowing control
-# Set up curses for arrow input
+# Assert yaw-pitch is not out of bounds
 #------------------------------------------------------------------------------
-#scr = curses.initscr()
-#curses.cbreak() 
-#scr.keypad(1) 
-#scr.addstr(0, 0, "Servo Volume Control")
-#scr.addstr(1, 0, "UP to increase volume")
-#scr.addstr(2, 0, "DOWN to decrease volume") 
-#scr.addstr(3, 0, "q to quit")
-#scr.refresh() 
+def checkYawPitch(deg):
+    if deg > maxDegree:
+        deg = maxDegree
+    elif deg < 0:
+        deg = 0
+    return deg
 
-pitchDeg = 90 # Start off at lowest volume
-yawDeg = 90 # Start off at lowest volume
-setDegree(0, pitchDeg) 
-setDegree(1, yawDeg) 
-
-key = '' 
 #------------------------------------------------------------------------------
 # Main run loop, waiting for chars from the keyboard
 #------------------------------------------------------------------------------
+key = '' 
 while key != 'q':
     key = raw_input("robot: ")
 
     #--------------------------------------------------------------------------
-    # Camera control via PWM
+    # Camera servo control via PWM
     # 
     # channel:
     #   0: pitch
@@ -72,47 +70,27 @@ while key != 'q':
     #--------------------------------------------------------------------------
     if key == 'k':
        pitchDeg += degIncrease
-       # bounds check: todo: move to func 
-       if pitchDeg > maxDegree:
-           pitchDeg = maxDegree
-       elif pitchDeg < 0:
-           pitchDeg = 0
-
+       pitchDeg = checkYawPitch(pitchDeg)
        setDegree(0, pitchDeg)
+
     if key == 'i':
        pitchDeg -= degIncrease
-       # bounds check: todo: move to func 
-       if pitchDeg > maxDegree:
-           pitchDeg = maxDegree
-       elif pitchDeg < 0:
-           pitchDeg = 0
-
+       pitchDeg = checkYawPitch(pitchDeg)
        setDegree(0, pitchDeg)
     
     # yaw: right 
     if key == 'l':
        yawDeg += degIncrease
-       # bounds check: todo: move to func 
-       if yawDeg > maxDegree:
-           yawDeg = maxDegree
-       elif yawDeg < 0:
-           yawDeg = 0
-
+       yawDeg = checkYawPitch(yawDeg)
        setDegree(1, yawDeg)
     # yaw: left 
     if key == 'j':
        yawDeg -= degIncrease
-       # bounds check: todo: move to func 
-       if yawDeg > maxDegree:
-           yawDeg = maxDegree
-       elif yawDeg < 0:
-           yawDeg = 0
-
+       yawDeg = checkYawPitch(yawDeg)
        setDegree(1, yawDeg)
-    
 
     #--------------------------------------------------------------------------
-    # Robot/Tread control via motors 
+    # Robot/Tread control via DC motors 
     #--------------------------------------------------------------------------
     if key == 'w':
         # FORWARD for a while...
@@ -163,5 +141,3 @@ while key != 'q':
         myMotor2.run(Adafruit_MotorHAT.BACKWARD)
         time.sleep(3)
         turnOffMotors()
-        
-#curses.endwin()
