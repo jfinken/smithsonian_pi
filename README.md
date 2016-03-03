@@ -1,5 +1,4 @@
-PCCAPS Smithsonian Project:
-===========================
+## PCCAPS Smithsonian Project:
 
  * main.py: controls all servos, DC motors and stepper-motor
 
@@ -12,6 +11,5 @@ PCCAPS Smithsonian Project:
 
 ## Dependencies
 
- * Adafruit_MotorHAT python library
- * Adafrut_PWM_Servo_Driver python library
+ * Adafruit_MotorHAT python library (included)
 
