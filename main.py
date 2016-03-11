@@ -1,7 +1,7 @@
 import time
 import atexit
 
-from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
+from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor, Adafruit_StepperMotor
 from Adafruit_MotorHAT.Adafruit_PWM_Servo_Driver import PWM
 
 # create a default object, no changes to I2C address or frequency
@@ -23,6 +23,13 @@ pitchDeg = 90 # Start off at lowest volume
 yawDeg = 90 # Start off at lowest volume
 setDegree(0, pitchDeg) 
 setDegree(1, yawDeg) 
+
+#------------------------------------------------------------------------------
+# stepper motor config 
+# TODO: tune these!
+#------------------------------------------------------------------------------
+myStepper = mh.getStepper(35, 1)        # 200 steps/rev, motor port #1
+myStepper.setSpeed(30000)               # 30 RPM
 
 #------------------------------------------------------------------------------
 # Actually set the PWM for a given channel: 0=pitch, 1=yaw
@@ -59,7 +66,20 @@ def checkYawPitch(deg):
 #------------------------------------------------------------------------------
 key = '' 
 while key != 'q':
+
     key = raw_input("robot: ")
+
+    #--------------------------------------------------------------------------
+    # Boom control via stepper motor:
+    #   y: up
+    #   n: down
+    # 
+    # TODO: completely untested on the pi...
+    #--------------------------------------------------------------------------
+    if key == 'y':
+        myStepper.step(50, Adafruit_MotorHAT.FORWARD,  Adafruit_MotorHAT.MICROSTEP)
+    if key == 'n':
+        myStepper.step(50, Adafruit_MotorHAT.BACKWARD,  Adafruit_MotorHAT.MICROSTEP)
 
     #--------------------------------------------------------------------------
     # Camera servo control via PWM
