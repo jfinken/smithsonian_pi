@@ -14,6 +14,14 @@ mh = Adafruit_MotorHAT(addr=0x60)
 yawPitchCam = PWM(0x41, debug=False) 
 yawPitchCam.setPWMFreq(60) # Set PWM frequency to 60Hz
 
+#------------------------------------------------------------------------------
+# Actually set the PWM for a given channel: 0=pitch, 1=yaw
+#------------------------------------------------------------------------------
+def setDegree(channel, d):
+    degreePulse = servoMin
+    degreePulse += int((servoMax - servoMin) / maxDegree) * d
+    yawPitchCam.setPWM(channel, 0, degreePulse)
+
 servoMin = 150 # Min pulse length out of 4096
 servoMax = 700 # Max pulse length out of 4096
 maxDegree = 180 # Degrees your servo can rotate
@@ -28,17 +36,8 @@ setDegree(1, yawDeg)
 # stepper motor config 
 # TODO: tune these!
 #------------------------------------------------------------------------------
-myStepper = mh.getStepper(35, 1)        # 200 steps/rev, motor port #1
-myStepper.setSpeed(30000)               # 30 RPM
-
-#------------------------------------------------------------------------------
-# Actually set the PWM for a given channel: 0=pitch, 1=yaw
-#------------------------------------------------------------------------------
-def setDegree(channel, d):
-    degreePulse = servoMin
-    degreePulse += int((servoMax - servoMin) / maxDegree) * d
-    yawPitchCam.setPWM(channel, 0, degreePulse)
-
+myStepper = mh.getStepper(50, 1)        # n steps/rev, motor port #1
+myStepper.setSpeed(120)                  # RPM
 
 #------------------------------------------------------------------------------
 # Motor control: 
@@ -74,12 +73,12 @@ while key != 'q':
     #   y: up
     #   n: down
     # 
-    # TODO: completely untested on the pi...
+    # signature is: step(num_steps, direction, stepstyle (MICROSTEP for smoother)
     #--------------------------------------------------------------------------
     if key == 'y':
-        myStepper.step(50, Adafruit_MotorHAT.FORWARD,  Adafruit_MotorHAT.MICROSTEP)
+        myStepper.step(100, Adafruit_MotorHAT.FORWARD,  Adafruit_MotorHAT.SINGLE)
     if key == 'n':
-        myStepper.step(50, Adafruit_MotorHAT.BACKWARD,  Adafruit_MotorHAT.MICROSTEP)
+        myStepper.step(100, Adafruit_MotorHAT.BACKWARD,  Adafruit_MotorHAT.SINGLE)
 
     #--------------------------------------------------------------------------
     # Camera servo control via PWM
@@ -103,6 +102,7 @@ while key != 'q':
        yawDeg += degIncrease
        yawDeg = checkYawPitch(yawDeg)
        setDegree(1, yawDeg)
+
     # yaw: left 
     if key == 'j':
        yawDeg -= degIncrease
