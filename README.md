@@ -1,6 +1,7 @@
 ## PCCAPS Smithsonian Project:
 
- * main.py: controls all servos, DC motors and stepper-motor
+ * main.py: controls all servos, DC motors and stepper-motor via the CLI
+ * app.py: a WIP Tornado web application to control the platform via HTTP
 
 ## Motors
 
@@ -12,4 +13,5 @@
 ## Dependencies
 
  * Adafruit_MotorHAT python library (included)
+ * Tornado (included)
 
