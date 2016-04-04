@@ -11,10 +11,10 @@ class MainHandler(tornado.web.RequestHandler):
     def initialize(self, robot):
             self.robot = robot 
 
-    # TODO: serve up Antonio's main index and assets
     def get(self):
-        self.write("Welcome PCCAPS Robotic Control. His name is: {}\n"
-                .format(self.robot.Name))
+        #self.write("Welcome PCCAPS Robotic Control. His name is: {}\n"
+                #.format(self.robot.Name))
+        self.render("html/index.html", title="PCCAPS Smithsonian Robotics")
 
 class CameraHandler(tornado.web.RequestHandler):
     def initialize(self, robot):
@@ -35,23 +35,49 @@ class CameraHandler(tornado.web.RequestHandler):
         elif right:
             self.robot.CameraYawRight()
             direction=right
-        self.write("Camera: {}".format(direction))
+        msg = "Camera: {}".format(direction)
+        print(msg)
+        self.write(msg)
 
 class BoomHandler(tornado.web.RequestHandler):
     def initialize(self, robot):
             self.robot = robot 
 
     @tornado.gen.coroutine
-    def get(self):
-        self.write("Boom control...")
+    def get(self, up=None, down=None):
+        direction=None
+        if up:
+            self.robot.BoomUp()
+            direction=up
+        elif down:
+            self.robot.BoomDown()
+            direction=down
+        msg = "Boom: {}".format(direction)
+        print(msg)
+        self.write(msg)
 
 class TreadHandler(tornado.web.RequestHandler):
     def initialize(self, robot):
             self.robot = robot 
 
     @tornado.gen.coroutine
-    def get(self):
-        self.write("Tread control...")
+    def get(self, forward=None, backward=None, left=None, right=None):
+        direction=None
+        if forward:
+            self.robot.TreadForward()
+            direction=forward
+        elif backward:
+            self.robot.TreadBackward()
+            direction=backward
+        elif left:
+            self.robot.TreadLeft()
+            direction=left
+        elif right:
+            self.robot.TreadRight()
+            direction=right
+        msg = "Tread control: {}".format(direction)
+        print(msg)
+        self.write(msg)
 
 # global state
 theRobot = Robot()
@@ -61,16 +87,20 @@ Main Tornado web application definition
 """
 class Application(tornado.web.Application):
     def __init__(self):
-        handlers = [(r"/", MainHandler,         {'robot':theRobot}),
-                    (r"/camera/(up)$", CameraHandler, {'robot':theRobot}),
+        handlers = [(r"/", MainHandler,                 {'robot':theRobot}),
+                    (r"/camera/(up)$", CameraHandler,   {'robot':theRobot}),
                     (r"/camera/(down)$", CameraHandler, {'robot':theRobot}),
                     (r"/camera/(left)$", CameraHandler, {'robot':theRobot}),
-                    (r"/camera/(right)$", CameraHandler, {'robot':theRobot}),
-                    (r"/boom", BoomHandler,     {'robot':theRobot}),
-                    (r"/tread", TreadHandler,   {'robot':theRobot}),
+                    (r"/camera/(right)$", CameraHandler,{'robot':theRobot}),
+                    (r"/boom/(up)$", BoomHandler,       {'robot':theRobot}),
+                    (r"/boom/(down)$", BoomHandler,     {'robot':theRobot}),
+                    (r"/tread/(forward)$", TreadHandler,{'robot':theRobot}),
+                    (r"/tread/(backward)$",TreadHandler,{'robot':theRobot}),
+                    (r"/tread/(left)$", TreadHandler,   {'robot':theRobot}),
+                    (r"/tread/(right)$", TreadHandler,  {'robot':theRobot}),
                 ]
-        settings = dict(template_path='/templates',
-                        static_path='/static', debug=False)
+        settings = dict(template_path='template/',
+                        static_path='static/', debug=False)
         tornado.web.Application.__init__(self, handlers, **settings)
 
 # Run the instance

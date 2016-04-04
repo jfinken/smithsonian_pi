@@ -113,12 +113,12 @@ while key != 'q':
     # Robot/Tread control via DC motors 
     #--------------------------------------------------------------------------
     if key == 'w':
-        # FORWARD for a while...
+        # set the speed to start, from 0 (off) to 255 (max)
         myMotor1 = mh.getMotor(3)
         myMotor2 = mh.getMotor(4)
         myMotor1.setSpeed(255)
         myMotor2.setSpeed(255)
-        # set the speed to start, from 0 (off) to 255 (max)
+        # FORWARD for a while...
         myMotor1.run(Adafruit_MotorHAT.FORWARD) 
         myMotor2.run(Adafruit_MotorHAT.FORWARD) 
         time.sleep(3)
