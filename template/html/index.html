@@ -1,0 +1,116 @@
+
+<!---PCCAPS ROBOT SERVER SOURCE CODE-->
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Bot Server</title>
+
+		<link rel="stylesheet" type="text/css" href="/static/CSS/stylesheet.css">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="/static/robot_requests.js"></script>
+	</head>
+
+	<body background="/static/Images/wallpaper.jpg">
+
+		<div id='logos'> 
+			<a href='http://caps.pcschools.us/'><img id='pccaps'src='/static/Images/pclogo.jpg'/></a>
+			<a href='https://www.si.edu/'><img id='smith' src='/static/Images/silogo.png'/></a>
+		</div>
+
+        <!--<div><iframe id='video' src='http://10.1.22.12:8080/browserfs.html'></iframe></div>-->
+ 		
+ 		<div> <table>
+
+			<thead><th colspan="3">Movement Controls</th></thead>
+
+	    	<tbody>	
+
+          		<tr>
+
+					<td id='curver'><button id='treadup'><img src="/static/Images/curve1.jpg"/></button></td> 
+	        		<td class='Up'><img src="/static/Images/up.png"/></td>
+	        		<td id='curvel'><img src="/static/Images/curve2.jpg"/></td>
+
+	      		</tr>
+	       
+	      		<tr>
+
+	        		<td class='Left'><img src="/static/Images/left.png"/></td>
+	        		<td id='Wheel'><img src="/static/Images/wheel.jpg"/></td>
+	        		<td class='Right'><img src="/static/Images/right.png"/></td>
+
+	      		</tr>
+
+	      		<tr>
+                    <!--JF: MISSING this file-->
+					<td id='curvedr'><img src="/static/Images/curve1.jpg"/></td> 
+	        		<td class='Down'><img src="/static/Images/down.png"/></td>
+                    <!--JF: MISSING this file-->
+	        		<td id='curvedl'><img src="/static/Images/curve2.jpg"/></td>
+
+	       		</tr>
+
+	    	</tbody>
+
+		</table>
+
+		<table id='table2'>
+
+	        <thead>
+
+	            <th colspan="3">Camera Controls</th>
+
+	  	    </thead>
+
+	      <tbody>
+
+	           <tr>
+
+	                <td id='doubleu'><img src="/static/Images/double1.png"/></td> 
+	                <td class='Up'><img src="/static/Images/up.png"/></td>
+	                <td id='singleu'><img src="/static/Images/single1.png"/></td>
+
+	           </tr>
+
+	           <tr>
+
+	            	<td class='Left'><img src="/static/Images/left.png"/></td>
+	            	<td id='Camera'><img src="/static/Images/camera.png"/></td>
+	            	<td class='Right'><img src="/static/Images/right.png"/></td>
+
+	           </tr>
+	          
+	           <tr>
+
+	            	<td id='doubled'><img src="/static/Images/double2.png"/></td>
+	            	<td class='Down'><img src="/static/Images/down.png"/></td>
+	            	<td id='singled'><img src="/static/Images/single2.ico"></td>
+	            
+	           </tr>
+
+	       </tbody>
+
+	      </table> </div> 
+
+          <!--<div><iframe id='settings' src='http://10.1.22.12:8080/'></iframe></div>-->
+
+	      <div id= 'images'>
+	     
+	      <img id= 'simap' src="/static/Images/simap.jpg"/>
+
+	      <img id= 'hmmap' src="/static/Images/hmmap.jpg"/>
+
+	      <img id= 'hmphoto' src="/static/Images/hmphoto.jpg"/>
+
+	      <img id= 'exhibit1' src="/static/Images/exhibit.jpg"/>
+
+	      <img id= 'hall' src="/static/Images/hall.jpg"/>
+
+	      <img id= 'blueprints' src="/static/Images/blueprints.jpg"/>
+
+	      </div>
+
+	</body>
+
+</html>
