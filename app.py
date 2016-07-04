@@ -61,23 +61,28 @@ class TreadHandler(tornado.web.RequestHandler):
             self.robot = robot 
 
     @tornado.gen.coroutine
-    def get(self, forward=None, backward=None, left=None, right=None):
-        direction=None
+    #def get(self, forward=None, backward=None, left=None, right=None):
+    def get(self):
+        direction = self.get_argument('dir')
+        amount = self.get_argument('amt')
+        """
         if forward:
-            self.robot.TreadForward()
+            #self.robot.TreadForward()
             direction=forward
         elif backward:
-            self.robot.TreadBackward()
+            #self.robot.TreadBackward()
             direction=backward
         elif left:
-            self.robot.TreadLeft()
+            #self.robot.TreadLeft(float(amount))
             direction=left
         elif right:
-            self.robot.TreadRight()
-            direction=right
-        msg = "Tread control: {}".format(direction)
+            #self.robot.TreadRight(float(amount))
+            direction="foo"
+        """
+        msg = "Tread control: {} for {} sec.".format(direction, amount)
         print(msg)
         self.write(msg)
+
 
 # global state
 theRobot = Robot()
@@ -94,10 +99,12 @@ class Application(tornado.web.Application):
                     (r"/camera/(right)$", CameraHandler,{'robot':theRobot}),
                     (r"/boom/(up)$", BoomHandler,       {'robot':theRobot}),
                     (r"/boom/(down)$", BoomHandler,     {'robot':theRobot}),
-                    (r"/tread/(forward)$", TreadHandler,{'robot':theRobot}),
-                    (r"/tread/(backward)$",TreadHandler,{'robot':theRobot}),
-                    (r"/tread/(left)$", TreadHandler,   {'robot':theRobot}),
-                    (r"/tread/(right)$", TreadHandler,  {'robot':theRobot}),
+                    (r"/tread$", TreadHandler,{'robot':theRobot}),
+                    #(r"/tread/(backward)$",TreadHandler,{'robot':theRobot}),
+                    #(r"/tread/(left)$", TreadHandler,   {'robot':theRobot}),
+                    #(r"/tread/(right)$", TreadHandler,  {'robot':theRobot}),
+                    #(r"/tread/(right)$", TreadHandlerDirection,  {'robot':theRobot}),
+                    #(r"/tread/(left)$", TreadHandlerDirection,  {'robot':theRobot}),
                 ]
         settings = dict(template_path='template/',
                         static_path='static/', debug=False)

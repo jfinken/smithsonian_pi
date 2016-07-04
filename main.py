@@ -61,10 +61,43 @@ def checkYawPitch(deg):
     return deg
 
 #------------------------------------------------------------------------------
+# 3 seconds is approx. 90-degrees
+#------------------------------------------------------------------------------
+def left(amount):
+    # LEFT for a while...
+    myMotor1 = mh.getMotor(3)
+    myMotor2 = mh.getMotor(4)
+    
+    # set the speed to start, from 0 (off) to 255 (max)
+    myMotor1.setSpeed(255)
+    myMotor2.setSpeed(255)
+
+    myMotor1.run(Adafruit_MotorHAT.FORWARD)
+    myMotor2.run(Adafruit_MotorHAT.BACKWARD)
+    time.sleep(amount)
+    turnOffMotors()
+
+#------------------------------------------------------------------------------
+# 3 seconds is approx. 90-degrees
+#------------------------------------------------------------------------------
+def right(amount):
+    
+    myMotor1 = mh.getMotor(3)
+    myMotor2 = mh.getMotor(4)
+    # set the speed to start, from 0 (off) to 255 (max)
+    myMotor1.setSpeed(255)
+    myMotor2.setSpeed(255)
+    myMotor1.run(Adafruit_MotorHAT.BACKWARD)
+    myMotor2.run(Adafruit_MotorHAT.FORWARD)
+    time.sleep(amount)
+    turnOffMotors()
+
+#------------------------------------------------------------------------------
 # Main run loop, waiting for chars from the keyboard
 #------------------------------------------------------------------------------
 key = '' 
-while key != 'q':
+#while key != 'q':
+while True:
 
     key = raw_input("robot: ")
 
@@ -125,30 +158,17 @@ while key != 'q':
         turnOffMotors()
 
     elif key == 'a': 
-        # LEFT for a while...
-        myMotor1 = mh.getMotor(3)
-        myMotor2 = mh.getMotor(4)
-        
-        # set the speed to start, from 0 (off) to 255 (max)
-        myMotor1.setSpeed(255)
-        myMotor2.setSpeed(255)
-
-        myMotor1.run(Adafruit_MotorHAT.FORWARD)
-        myMotor2.run(Adafruit_MotorHAT.BACKWARD)
-        time.sleep(3)
-        turnOffMotors()
-
+        # LEFT for approx 90-deg
+        left(3)
+    elif key == 'q':
+        # LEFT for approx 45-deg
+        left(1.5)
     elif key == 'd':
-        # RIGHT for a while...
-        myMotor1 = mh.getMotor(3)
-        myMotor2 = mh.getMotor(4)
-        # set the speed to start, from 0 (off) to 255 (max)
-        myMotor1.setSpeed(255)
-        myMotor2.setSpeed(255)
-        myMotor1.run(Adafruit_MotorHAT.BACKWARD)
-        myMotor2.run(Adafruit_MotorHAT.FORWARD)
-        time.sleep(3)
-        turnOffMotors()
+        # RIGHT for approx 90-deg
+        right(3)
+    elif key == 'e':
+        # RIGHT for approx 45-deg
+        right(1.5)
 
     elif key == 's':
         # BACKWARD for a while...
@@ -161,3 +181,4 @@ while key != 'q':
         myMotor2.run(Adafruit_MotorHAT.BACKWARD)
         time.sleep(3)
         turnOffMotors()
+

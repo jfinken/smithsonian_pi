@@ -1,14 +1,14 @@
-
+import time
 import atexit
-#from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor, Adafruit_StepperMotor
-#from Adafruit_MotorHAT.Adafruit_PWM_Servo_Driver import PWM
+from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor, Adafruit_StepperMotor
+from Adafruit_MotorHAT.Adafruit_PWM_Servo_Driver import PWM
 
 class Robot():
     def __init__(self):
         self.Name = 'Sparky'
-        #atexit.register(self.turnOffMotors)
+        atexit.register(self.turnOffMotors)
         # create a default object, no changes to I2C address or frequency
-        #self.mh = Adafruit_MotorHAT(addr=0x60)
+        self.mh = Adafruit_MotorHAT(addr=0x60)
 
         #------------------------------------------------------------------------------
         # PWM control for the camera pod:
@@ -95,9 +95,8 @@ class Robot():
     #--------------------------------------------------------------------------
     def TreadForward(self):
         # set the speed to start, from 0 (off) to 255 (max)
-        return
-        myMotor1 = mh.getMotor(3)
-        myMotor2 = mh.getMotor(4)
+        myMotor1 = self.mh.getMotor(3)
+        myMotor2 = self.mh.getMotor(4)
         myMotor1.setSpeed(255)
         myMotor2.setSpeed(255)
         # FORWARD for a while...
@@ -108,9 +107,8 @@ class Robot():
 
     def TreadBackward(self):
         # set the speed to start, from 0 (off) to 255 (max)
-        return
-        myMotor1 = mh.getMotor(3)
-        myMotor2 = mh.getMotor(4)
+        myMotor1 = self.mh.getMotor(3)
+        myMotor2 = self.mh.getMotor(4)
         myMotor1.setSpeed(255)
         myMotor2.setSpeed(255)
         # BACKWARD for a while...
@@ -119,31 +117,33 @@ class Robot():
         time.sleep(3)
         self.turnOffMotors()
 
-    def TreadLeft():
+    def TreadLeft(self, amount):
         # set the speed to start, from 0 (off) to 255 (max)
-        return
-        myMotor1 = mh.getMotor(3)
-        myMotor2 = mh.getMotor(4)
+        '''
+        myMotor1 = self.mh.getMotor(3)
+        myMotor2 = self.mh.getMotor(4)
         myMotor1.setSpeed(255)
         myMotor2.setSpeed(255)
 
-        # LEFT for a while...
+        # LEFT for: 3 sec is approx 90-deg
         myMotor1.run(Adafruit_MotorHAT.FORWARD)
         myMotor2.run(Adafruit_MotorHAT.BACKWARD)
-        time.sleep(3)
+        '''
+        print("robot - treadleft for {}".format(amount))
+        time.sleep(amount)
         self.turnOffMotors()
    
-    def TreadRight():
+    def TreadRight(self, amount):
         # set the speed to start, from 0 (off) to 255 (max)
-        return
-        myMotor1 = mh.getMotor(3)
-        myMotor2 = mh.getMotor(4)
+        myMotor1 = self.mh.getMotor(3)
+        myMotor2 = self.mh.getMotor(4)
         myMotor1.setSpeed(255)
         myMotor2.setSpeed(255)
-        # RIGHT for a while...
+        # RIGHT for: 3 sec is approx 90-deg
         myMotor1.run(Adafruit_MotorHAT.BACKWARD)
         myMotor2.run(Adafruit_MotorHAT.FORWARD)
-        time.sleep(3)
+        print("robot - treadRight for {}".format(amount))
+        time.sleep(amount)
         self.turnOffMotors()
 
     def turnOffMotors(self):
