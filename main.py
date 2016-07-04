@@ -169,6 +169,34 @@ while True:
     elif key == 'e':
         # RIGHT for approx 45-deg
         right(1.5)
+    elif key == 'r':
+        # left for approx 22-deg
+        right(0.75)
+    elif key == 't':
+        # right for approx 22-deg
+        left(0.75)
+    elif key == '2':
+        myMotor1 = mh.getMotor(3)
+        myMotor2 = mh.getMotor(4)
+        myMotor1.setSpeed(255)
+        myMotor2.setSpeed(255)
+        # FORWARD for a while...
+        myMotor1.run(Adafruit_MotorHAT.FORWARD) 
+        myMotor2.run(Adafruit_MotorHAT.FORWARD) 
+        time.sleep(1.5)
+        turnOffMotors()
+    
+    elif key == '3':
+        # BACKWARD for a while...
+        myMotor1 = mh.getMotor(3)
+        myMotor2 = mh.getMotor(4)
+        # set the speed to start, from 0 (off) to 255 (max)
+        myMotor1.setSpeed(255)
+        myMotor2.setSpeed(255)
+        myMotor1.run(Adafruit_MotorHAT.BACKWARD) 
+        myMotor2.run(Adafruit_MotorHAT.BACKWARD)
+        time.sleep(1.5)
+        turnOffMotors()
 
     elif key == 's':
         # BACKWARD for a while...
