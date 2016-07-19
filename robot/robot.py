@@ -50,12 +50,12 @@ class Robot():
     # 
     # signature is: step(num_steps, direction, stepstyle (MICROSTEP for smoother)
     #--------------------------------------------------------------------------
-    def BoomUp(self):
+    def Boom(self, direction, num_steps):
         return
-        myStepper.step(100, Adafruit_MotorHAT.FORWARD,  Adafruit_MotorHAT.SINGLE)
-    def BoomDown(self):
-        return
-        myStepper.step(100, Adafruit_MotorHAT.BACKWARD,  Adafruit_MotorHAT.SINGLE)
+        if direction == 'up':
+            myStepper.step(int(num_steps), Adafruit_MotorHAT.FORWARD,  Adafruit_MotorHAT.SINGLE)
+        elif direction == 'down':
+            myStepper.step(int(num_steps), Adafruit_MotorHAT.BACKWARD,  Adafruit_MotorHAT.SINGLE)
 
     #------------------------------------------------------------------------------
     # Camera servo control via PWM
@@ -64,23 +64,24 @@ class Robot():
     #   0: pitch
     #   1: yaw 
     #------------------------------------------------------------------------------
-    def CameraPitchUp(self):
-        self.pitchDeg += self.degIncrease
+    def CameraPitch(self, direction, amount):
+        if direction == 'up':
+            #self.pitchDeg += self.degIncrease
+            self.pitchDeg += amount
+        elif direction == 'down':
+            #self.pitchDeg -= self.degIncrease
+            self.pitchDeg -= amount
+
         self.pitchDeg = self.checkYawPitch(self.pitchDeg)
         self.setDegree(0, self.pitchDeg)
 
-    def CameraPitchDown(self):
-        self.pitchDeg -= self.degIncrease
-        self.pitchDeg = self.checkYawPitch(self.pitchDeg)
-        self.setDegree(1, deg)
+    def CameraYaw(self, direction, amount):
+        if direction == 'left':
+            #self.yawDeg += self.degIncrease
+            self.yawDeg += amount
+        elif direction == 'right':
+            self.yawDeg -= amount
 
-    def CameraYawLeft(self):
-        self.yawDeg += self.degIncrease
-        self.yawDeg = self.checkYawPitch(self.yawDeg)
-        self.setDegree(1, self.yawDeg)
-
-    def CameraYawRight(self):
-        self.yawDeg -= self.degIncrease
         self.yawDeg = self.checkYawPitch(self.yawDeg)
         self.setDegree(1, self.yawDeg)
 
@@ -93,56 +94,28 @@ class Robot():
     #--------------------------------------------------------------------------
     # Robot/Tread control via DC motors 
     #--------------------------------------------------------------------------
-    def TreadForward(self):
+    def Tread(self, direction, amount):
         # set the speed to start, from 0 (off) to 255 (max)
         myMotor1 = self.mh.getMotor(3)
         myMotor2 = self.mh.getMotor(4)
         myMotor1.setSpeed(255)
         myMotor2.setSpeed(255)
-        # FORWARD for a while...
-        myMotor1.run(Adafruit_MotorHAT.FORWARD) 
-        myMotor2.run(Adafruit_MotorHAT.FORWARD) 
-        time.sleep(3)
-        self.turnOffMotors()
-
-    def TreadBackward(self):
-        # set the speed to start, from 0 (off) to 255 (max)
-        myMotor1 = self.mh.getMotor(3)
-        myMotor2 = self.mh.getMotor(4)
-        myMotor1.setSpeed(255)
-        myMotor2.setSpeed(255)
-        # BACKWARD for a while...
-        myMotor1.run(Adafruit_MotorHAT.BACKWARD) 
-        myMotor2.run(Adafruit_MotorHAT.BACKWARD)
-        time.sleep(3)
-        self.turnOffMotors()
-
-    def TreadLeft(self, amount):
-        # set the speed to start, from 0 (off) to 255 (max)
-        '''
-        myMotor1 = self.mh.getMotor(3)
-        myMotor2 = self.mh.getMotor(4)
-        myMotor1.setSpeed(255)
-        myMotor2.setSpeed(255)
-
-        # LEFT for: 3 sec is approx 90-deg
-        myMotor1.run(Adafruit_MotorHAT.FORWARD)
-        myMotor2.run(Adafruit_MotorHAT.BACKWARD)
-        '''
-        print("robot - treadleft for {}".format(amount))
-        time.sleep(amount)
-        self.turnOffMotors()
-   
-    def TreadRight(self, amount):
-        # set the speed to start, from 0 (off) to 255 (max)
-        myMotor1 = self.mh.getMotor(3)
-        myMotor2 = self.mh.getMotor(4)
-        myMotor1.setSpeed(255)
-        myMotor2.setSpeed(255)
-        # RIGHT for: 3 sec is approx 90-deg
-        myMotor1.run(Adafruit_MotorHAT.BACKWARD)
-        myMotor2.run(Adafruit_MotorHAT.FORWARD)
-        print("robot - treadRight for {}".format(amount))
+        if direction == 'forward':
+            # FORWARD
+            myMotor1.run(Adafruit_MotorHAT.FORWARD) 
+            myMotor2.run(Adafruit_MotorHAT.FORWARD) 
+        elif direction == 'backward':
+            # BACKWARD 
+            myMotor1.run(Adafruit_MotorHAT.BACKWARD) 
+            myMotor2.run(Adafruit_MotorHAT.BACKWARD)
+        elif direction == 'left':
+            # LEFT for: 3 sec is approx 90-deg
+            myMotor1.run(Adafruit_MotorHAT.FORWARD)
+            myMotor2.run(Adafruit_MotorHAT.BACKWARD)
+        elif direction == 'right':
+            # RIGHT for: 3 sec is approx 90-deg
+            myMotor1.run(Adafruit_MotorHAT.BACKWARD)
+            myMotor2.run(Adafruit_MotorHAT.FORWARD)
         time.sleep(amount)
         self.turnOffMotors()
 
